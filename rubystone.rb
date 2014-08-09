@@ -20,7 +20,7 @@
 #
 # Version History:
 #
-#                 Version 1.0 Porting of Python/1.1 PYSTONE version
+#                 Version 1.0 (porting of Python/1.1 PYSTONE version)
 #
 # References:     PYSTONE 1.1: http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py
 

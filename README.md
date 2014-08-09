@@ -28,7 +28,7 @@ platforms with JIT compilation (JRuby, Rubinius).
 
 ## Version History
 
-Version 1.0 Porting of Python/1.1 PYSTONE version
+Version 1.0 (porting of Python/1.1 PYSTONE version)
 
 ## References
 
