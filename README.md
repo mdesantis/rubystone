@@ -18,7 +18,7 @@ at the expense of C-ness.
 
 Translated from C to Python by Guido van Rossum.
 
-Translated from Python to Ruby by Maurizio De Santis.
+Translated from Python to Ruby by [Maurizio De Santis](https://github.com/mdesantis).
 
 ## Changes
 
