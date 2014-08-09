@@ -4,6 +4,34 @@
 
 This is the Ruby porting of the Python [PYSTONE](http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py) script. It provides a rough benchmark of the Ruby interpreter via the `rubystone` executable.
 
+# Usage
+
+Install the gem:
+
+
+```
+gem install rubystone
+```
+
+Or clone the project:
+
+
+```
+git clone https://github.com/mdesantis/rubystone
+```
+
+Then use the `rubystone` executable:
+
+
+```
+$ rubystone
+Rubystone 1.0 cold time for 50000 passes = 0.6164484
+This machine benchmarks at 81109 cold rubystones/second
+Rubystone 1.0 warm time for 50000 passes = 0.6284089
+This machine benchmarks at 79566 warm rubystones/second
+
+```
+
 ## Version
 
 Ruby/1.0 (corresponds to Python/1.1 PYSTONE version)
