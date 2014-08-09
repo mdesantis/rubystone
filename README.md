@@ -1,5 +1,9 @@
 # ["RUBYSTONE" Benchmark Program](https://github.com/mdesantis/rubystone)
 
+## Description
+
+Ruby porting of the Python PYSTONE script.
+
 ## Version
 
 Ruby/1.0 (corresponds to Python/1.1 PYSTONE version)
