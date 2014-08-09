@@ -1,0 +1,275 @@
+#! /usr/bin/env ruby
+
+# "RUBYSTONE" Benchmark Program
+#
+# Version:        Ruby/1.0 (corresponds to Python/1.1 PYSTONE version)
+#
+# Author:         Reinhold P. Weicker,  CACM Vol 27, No 10, 10/84 pg. 1013.
+#
+#                 Translated from ADA to C by Rick Richardson.
+#                 Every method to preserve ADA-likeness has been used,
+#                 at the expense of C-ness.
+#
+#                 Translated from C to Python by Guido van Rossum.
+#
+#                 Translated from Python to Ruby by Maurizio De Santis.
+#
+# Changes:        The Ruby version runs two indentical benchmarks sequentially,
+#                 the "cold" run and the "warm" run: the latter is intended for
+#                 platforms with JIT compilation (JRuby, Rubinius).
+#
+# Version History:
+#
+#                 Version 1.0 Porting of Python/1.1 PYSTONE version
+#
+# References:     PYSTONE 1.1: http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py
+
+LOOPS = 50000
+
+VERSION = "1.0"
+
+IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = (1..5).to_a
+
+class Record
+  attr_accessor :ptr_comp, :discr, :enum_comp, :int_comp, :string_comp
+
+  def initialize(ptr_comp = nil, discr = 0, enum_comp = 0, int_comp = 0, string_comp = 0)
+    @ptr_comp    = ptr_comp
+    @discr       = discr
+    @enum_comp   = enum_comp
+    @int_comp    = int_comp
+    @string_comp = string_comp
+  end
+end
+
+def init_globs
+  $int_glob     = 0
+  $bool_glob    = false
+  $char1_glob   = '\0'
+  $char2_glob   = '\0'
+  $array1_glob  = [0]*51
+  $array2_glob  = ([$array1_glob]*51).map { |x| x }
+  $ptr_glb      = nil
+  $ptr_glb_next = nil
+end
+
+def main(status, loops = LOOPS)
+  init_globs
+  benchtime, stones = rubystones(loops)
+  puts "Rubystone %s %s time for %d passes = %.7g" % [VERSION, status, loops, benchtime]
+  puts "This machine benchmarks at %d %s rubystones/second" % [stones, status]
+end
+
+def rubystones(loops = LOOPS)
+  proc0(loops)
+end
+
+def proc0(loops = LOOPS)
+  starttime = Time.now
+  loops.times { |i| nil }
+  nulltime = Time.now - starttime
+
+  $ptr_glb_next = Record.new
+  $ptr_glb = Record.new
+  $ptr_glb.ptr_comp = $ptr_glb_next
+  $ptr_glb.discr = IDENT1
+  $ptr_glb.enum_comp = IDENT3
+  $ptr_glb.int_comp = 40
+  $ptr_glb.string_comp = "DHRYSTONE PROGRAM, SOME STRING"
+  string1_loc = "DHRYSTONE PROGRAM, 1'ST STRING"
+  $array2_glob[8][7] = 10
+
+  starttime = Time.now
+
+  loops.times do |i|
+    proc5()
+    proc4()
+
+    int_loc1 = 2
+    int_loc2 = 3
+    string2_loc = "DHRYSTONE PROGRAM, 2'ND STRING"
+    enum_loc = IDENT2
+    $bool_glob = !func2(string1_loc, string2_loc)
+    while int_loc1 < int_loc2 do
+      int_loc3 = 5 * int_loc1 - int_loc2
+      int_loc3 = proc7(int_loc1, int_loc2)
+      int_loc1 = int_loc1 + 1
+    end
+    proc8($array1_glob, $array2_glob, int_loc1, int_loc3)
+    $ptr_glb = proc1($ptr_glb)
+    char_index = 'A'
+    while char_index <= $char2_glob do
+      if enum_loc == func1(char_index, 'C')
+        enum_loc = proc6(IDENT1)
+      end
+      char_index = (char_index.ord+1).chr
+    end
+    int_loc3 = int_loc2 * int_loc1
+    int_loc2 = int_loc3 / int_loc1
+    int_loc2 = 7 * (int_loc3 - int_loc2) - int_loc1
+    int_loc1 = proc2(int_loc1)
+  end
+
+  benchtime = Time.now - starttime - nulltime
+  if benchtime == 0.0
+    loopsPerBenchtime = 0.0
+  else
+    loopsPerBenchtime = loops / benchtime
+  end
+  return [benchtime, loopsPerBenchtime]
+end
+
+def proc1(ptr_par_in)
+  ptr_par_in.ptr_comp = next_record = $ptr_glb.dup
+  ptr_par_in.int_comp = 5
+  next_record.int_comp = ptr_par_in.int_comp
+  next_record.ptr_comp = ptr_par_in.ptr_comp
+  next_record.ptr_comp = proc3(next_record.ptr_comp)
+  if next_record.discr == IDENT1
+    next_record.int_comp = 6
+    next_record.enum_comp = proc6(ptr_par_in.enum_comp)
+    next_record.ptr_comp = $ptr_glb.ptr_comp
+    next_record.int_comp = proc7(next_record.int_comp, 10)
+  else
+    ptr_par_in = next_record.dup
+  end
+  next_record.ptr_comp = nil
+  return ptr_par_in
+end
+
+def proc2(int_par_io)
+  int_loc = int_par_io + 10
+  loop do
+    if $char1_glob == 'A'
+      int_loc = int_loc - 1
+      int_par_io = int_loc - $int_glob
+      enum_loc = IDENT1
+    end
+    if enum_loc == IDENT1
+      break
+    end
+  end
+  return int_par_io
+end
+
+def proc3(ptr_par_out)
+  if $ptr_glb != nil
+    ptr_par_out = $ptr_glb.ptr_comp
+  else
+    $int_glob = 100
+  end
+  $ptr_glb.int_comp = proc7(10, $int_glob)
+  return ptr_par_out
+end
+
+def proc4
+  bool_loc = $char1_glob == 'A'
+  bool_loc = bool_loc || $bool_glob
+  $char2_glob = 'B'
+end
+
+def proc5
+  $char1_glob = 'A'
+  $bool_glob = false
+end
+
+def proc6(enum_par_in)
+  enum_par_out = enum_par_in
+  if !func3(enum_par_in)
+    enum_par_out = IDENT4
+  end
+  if enum_par_in == IDENT1
+    enum_par_out = IDENT1
+  elsif enum_par_in == IDENT2
+    if $int_glob > 100
+      enum_par_out = IDENT1
+    else
+      enum_par_out = IDENT4
+    end
+  elsif enum_par_in == IDENT3
+    enum_par_out = IDENT2
+  elsif enum_par_in == IDENT4
+    nil
+  elsif enum_par_in == IDENT5
+    enum_par_out = IDENT3
+  end
+  return enum_par_out
+end
+
+def proc7(int_parI1, int_parI2)
+  int_loc = int_parI1 + 2
+  int_par_out = int_parI2 + int_loc
+  return int_par_out
+end
+
+def proc8(array1_par, array2_par, int_parI1, int_parI2)
+  int_loc = int_parI1 + 5
+  array1_par[int_loc] = int_parI2
+  array1_par[int_loc+1] = array1_par[int_loc]
+  array1_par[int_loc+30] = int_loc
+  int_loc.upto(int_loc+1) do |intIndex|
+    array2_par[int_loc][intIndex] = int_loc
+  end
+  array2_par[int_loc][int_loc-1] = array2_par[int_loc][int_loc-1] + 1
+  array2_par[int_loc+20][int_loc] = array1_par[int_loc]
+  $int_glob = 5
+end
+
+def func1(char_par1, char_par2)
+  char_loc1 = char_par1
+  char_loc2 = char_loc1
+  if char_loc2 != char_par2
+    return IDENT1
+  else
+    return IDENT2
+  end
+end
+
+def func2(str_parI1, str_parI2)
+  int_loc = 1
+  while int_loc <= 1 do
+    if func1(str_parI1[int_loc], str_parI2[int_loc+1]) == IDENT1
+      char_loc = 'A'
+      int_loc = int_loc + 1
+    end
+  end
+  if char_loc >= 'W' && char_loc <= 'Z'
+    int_loc = 7
+  end
+  if char_loc == 'X'
+    return true
+  else
+    if str_parI1 > str_parI2
+      int_loc = int_loc + 7
+      return true
+    else
+      return false
+    end
+  end
+end
+
+def func3(enum_par_in)
+  enum_loc = enum_par_in
+  return true if enum_loc == IDENT3
+  return false
+end
+
+def error(msg)
+  $stderr.puts msg
+  $stderr.puts "usage: %s [number_of_loops]" % __FILE__
+  exit(100)
+end
+
+loops = LOOPS
+nargs = ARGV.size
+if nargs > 1
+  error("%d arguments are too many;" % nargs)
+elsif nargs == 1
+  if /\A\d+\z/ !~ ARGV[0].to_s
+    error("Invalid argument %s; it must be a number" % ARGV[0])
+  end
+  loops = ARGV[0].to_i
+end
+
+main('cold', loops)
+main('warm', loops)
