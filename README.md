@@ -2,7 +2,7 @@
 
 ## Description
 
-Ruby porting of the Python [PYSTONE](http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py) script.
+This is the Ruby porting of the Python [PYSTONE](http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py) script. It provides a rough benchmark of the Ruby interpreter via the `rubystone` executable.
 
 ## Version
 
