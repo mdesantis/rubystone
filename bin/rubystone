@@ -256,7 +256,7 @@ end
 
 def error(msg)
   $stderr.puts msg
-  $stderr.puts "usage: %s [number_of_loops]" % __FILE__
+  $stderr.puts "usage: rubystone [number_of_loops]"
   exit(100)
 end
 
