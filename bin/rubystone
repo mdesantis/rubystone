@@ -2,7 +2,11 @@
 
 # "RUBYSTONE" Benchmark Program
 #
-# Version:        Ruby/1.0 (corresponds to Python/1.1 PYSTONE version)
+# Description:    This is the Ruby porting of the Python PYSTONE script.
+#                 It provides a rough benchmark of the Ruby interpreter.
+#
+#
+# Version:        Ruby/1.0.2 (corresponds to Python/1.1 PYSTONE version)
 #
 # Author:         Reinhold P. Weicker,  CACM Vol 27, No 10, 10/84 pg. 1013.
 #
@@ -20,9 +24,13 @@
 #
 # Version History:
 #
-#                 Version 1.0 (porting of Python/1.1 PYSTONE version)
+#        1.0.2    Updating of the script comment in order to reflect the README
+#        1.0.1    Generating new gem
+#        1.0      Porting of Python/1.1 PYSTONE version
 #
 # References:     PYSTONE 1.1: http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py
+#
+# License:        MIT
 
 LOOPS = 50000
 

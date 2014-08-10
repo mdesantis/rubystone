@@ -2,7 +2,8 @@
 
 ## Description
 
-This is the Ruby porting of the Python [PYSTONE](http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py) script. It provides a rough benchmark of the Ruby interpreter via the `rubystone` executable.
+This is the Ruby porting of the Python [PYSTONE](http://hg.python.org/cpython/file/fc4ef17c7db8/Lib/test/pystone.py) script.
+It provides a rough benchmark of the Ruby interpreter via the `rubystone` executable.
 
 # Usage
 
@@ -20,7 +21,7 @@ Or clone the project:
 git clone https://github.com/mdesantis/rubystone
 ```
 
-Then use the `rubystone` executable:
+Then use the `rubystone` executable (`bin/rubystone` if you cloned the project):
 
 
 ```
@@ -34,7 +35,7 @@ This machine benchmarks at 79566 warm rubystones/second
 
 ## Version
 
-Ruby/1.0 (corresponds to Python/1.1 PYSTONE version)
+Ruby/1.0.2 (corresponds to Python/1.1 PYSTONE version)
 
 ## Author
 
@@ -57,6 +58,7 @@ platforms with JIT compilation (JRuby, Rubinius).
 ## Version History
 
 <dl>
+  <dt>1.0.2</dt> <dd>Updating of the script comment in order to reflect the README</dd>
   <dt>1.0.1</dt> <dd>Generating new gem</dd>
   <dt>1.0</dt>   <dd>Porting of Python/1.1 PYSTONE version</dd>
 </dl>
