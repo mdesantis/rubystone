@@ -57,8 +57,8 @@ platforms with JIT compilation (JRuby, Rubinius).
 ## Version History
 
 <dl>
-  <dt>Version 1.0.1</dt> <dd>Generating new gem</dd>
-  <dt>Version 1.0</dt> <dd>Porting of Python/1.1 PYSTONE version</dd>
+  <dt>1.0.1</dt> <dd>Generating new gem</dd>
+  <dt>1.0</dt>   <dd>Porting of Python/1.1 PYSTONE version</dd>
 </dl>
 
 ## References
