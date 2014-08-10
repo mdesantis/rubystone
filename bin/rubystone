@@ -24,6 +24,7 @@
 #
 # Version History:
 #
+#        1.0.4    Syntax clean up and small refactorings
 #        1.0.3    Updating README
 #        1.0.2    Updating of the script comment in order to reflect the README
 #        1.0.1    Generating new gem
@@ -35,9 +36,9 @@
 
 LOOPS = 50000
 
-VERSION = "1.0"
+VERSION = '1.0.4'
 
-IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = (1..5).to_a
+IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| :"#{v}" }
 
 class Record
   attr_accessor :ptr_comp, :discr, :enum_comp, :int_comp, :string_comp
@@ -64,19 +65,19 @@ end
 
 def main(status, loops = LOOPS)
   init_globs
-  benchtime, stones = rubystones(loops)
-  puts "Rubystone %s %s time for %d passes = %.7g" % [VERSION, status, loops, benchtime]
+  bench_time, stones = rubystones(loops)
+  puts "Rubystone %s %s time for %d passes = %.7g" % [VERSION, status, loops, bench_time]
   puts "This machine benchmarks at %d %s rubystones/second" % [stones, status]
 end
 
 def rubystones(loops = LOOPS)
-  proc0(loops)
+  proc0 loops
 end
 
 def proc0(loops = LOOPS)
-  starttime = Time.now
+  start_time = Time.now
   loops.times { |i| nil }
-  nulltime = Time.now - starttime
+  null_time = Time.now - start_time
 
   $ptr_glb_next = Record.new
   $ptr_glb = Record.new
@@ -88,11 +89,17 @@ def proc0(loops = LOOPS)
   string1_loc = "DHRYSTONE PROGRAM, 1'ST STRING"
   $array2_glob[8][7] = 10
 
-  starttime = Time.now
+  start_time = Time.now
 
   loops.times do |i|
-    proc5()
-    proc4()
+    # proc5
+    $char1_glob = 'A'
+    $bool_glob  = false
+
+    # proc4
+    bool_loc = $char1_glob == 'A'
+    bool_loc = bool_loc || $bool_glob
+    $char2_glob = 'B'
 
     int_loc1 = 2
     int_loc2 = 3
@@ -102,7 +109,7 @@ def proc0(loops = LOOPS)
     while int_loc1 < int_loc2 do
       int_loc3 = 5 * int_loc1 - int_loc2
       int_loc3 = proc7(int_loc1, int_loc2)
-      int_loc1 = int_loc1 + 1
+      int_loc1 += 1
     end
     proc8($array1_glob, $array2_glob, int_loc1, int_loc3)
     $ptr_glb = proc1($ptr_glb)
@@ -119,13 +126,14 @@ def proc0(loops = LOOPS)
     int_loc1 = proc2(int_loc1)
   end
 
-  benchtime = Time.now - starttime - nulltime
-  if benchtime == 0.0
-    loopsPerBenchtime = 0.0
+  bench_time = Time.now - start_time - null_time
+  if bench_time <= 0
+    loops_per_bench_time = 0.0
   else
-    loopsPerBenchtime = loops / benchtime
+    loops_per_bench_time = loops / bench_time
   end
-  return [benchtime, loopsPerBenchtime]
+  
+  [bench_time, loops_per_bench_time]
 end
 
 def proc1(ptr_par_in)
@@ -171,20 +179,9 @@ def proc3(ptr_par_out)
   return ptr_par_out
 end
 
-def proc4
-  bool_loc = $char1_glob == 'A'
-  bool_loc = bool_loc || $bool_glob
-  $char2_glob = 'B'
-end
-
-def proc5
-  $char1_glob = 'A'
-  $bool_glob = false
-end
-
 def proc6(enum_par_in)
   enum_par_out = enum_par_in
-  if !func3(enum_par_in)
+  if enum_par_in != IDENT3
     enum_par_out = IDENT4
   end
   if enum_par_in == IDENT1
@@ -225,13 +222,7 @@ def proc8(array1_par, array2_par, int_parI1, int_parI2)
 end
 
 def func1(char_par1, char_par2)
-  char_loc1 = char_par1
-  char_loc2 = char_loc1
-  if char_loc2 != char_par2
-    return IDENT1
-  else
-    return IDENT2
-  end
+  char_par1 == char_par2 ? IDENT2 : IDENT1
 end
 
 def func2(str_parI1, str_parI2)
@@ -255,12 +246,6 @@ def func2(str_parI1, str_parI2)
       return false
     end
   end
-end
-
-def func3(enum_par_in)
-  enum_loc = enum_par_in
-  return true if enum_loc == IDENT3
-  return false
 end
 
 def error(msg)
