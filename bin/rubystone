@@ -1,4 +1,4 @@
-#! /usr/bin/env ruby
+#!/usr/bin/env ruby
 
 # "RUBYSTONE" Benchmark Program
 #
@@ -6,7 +6,7 @@
 #                 It provides a rough benchmark of the Ruby interpreter.
 #
 #
-# Version:        Ruby/1.0.2 (corresponds to Python/1.1 PYSTONE version)
+# Version:        Ruby/1.0.3 (corresponds to Python/1.1 PYSTONE version)
 #
 # Author:         Reinhold P. Weicker,  CACM Vol 27, No 10, 10/84 pg. 1013.
 #
@@ -24,6 +24,7 @@
 #
 # Version History:
 #
+#        1.0.3    Updating README
 #        1.0.2    Updating of the script comment in order to reflect the README
 #        1.0.1    Generating new gem
 #        1.0      Porting of Python/1.1 PYSTONE version
