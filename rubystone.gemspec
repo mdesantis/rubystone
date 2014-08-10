@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'rubystone'
-  spec.version       = '1.0.3'
+  spec.version       = File.read File.expand_path(File.join('..', 'VERSION'), __FILE__)
   spec.license       = 'MIT'
   spec.summary       = 'Ruby porting of the Python PYSTONE script'
   spec.description   = <<-DESC

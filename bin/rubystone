@@ -36,7 +36,7 @@
 
 LOOPS = 50000
 
-VERSION = '1.0.4'
+VERSION = File.read File.expand_path(File.join('..', '..', 'VERSION'), __FILE__)
 
 IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| :"#{v}" }
 
