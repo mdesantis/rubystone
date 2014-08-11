@@ -38,7 +38,7 @@ LOOPS = 50000
 
 VERSION = File.read File.expand_path(File.join('..', '..', 'VERSION'), __FILE__)
 
-IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| :"#{v}" }
+IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| v.to_s.to_sym }
 
 class Record
   attr_accessor :ptr_comp, :discr, :enum_comp, :int_comp, :string_comp
@@ -80,23 +80,25 @@ def proc0(loops = LOOPS)
   null_time = Time.now - start_time
 
   $ptr_glb_next = Record.new
+
   $ptr_glb = Record.new
-  $ptr_glb.ptr_comp = $ptr_glb_next
-  $ptr_glb.discr = IDENT1
-  $ptr_glb.enum_comp = IDENT3
-  $ptr_glb.int_comp = 40
+  $ptr_glb.ptr_comp    = $ptr_glb_next
+  $ptr_glb.discr       = IDENT1
+  $ptr_glb.enum_comp   = IDENT3
+  $ptr_glb.int_comp    = 40
   $ptr_glb.string_comp = "DHRYSTONE PROGRAM, SOME STRING"
+
   string1_loc = "DHRYSTONE PROGRAM, 1'ST STRING"
   $array2_glob[8][7] = 10
 
   start_time = Time.now
 
   loops.times do |i|
-    # proc5
+    # original proc5
     $char1_glob = 'A'
     $bool_glob  = false
 
-    # proc4
+    # original proc4
     bool_loc = $char1_glob == 'A'
     bool_loc = bool_loc || $bool_glob
     $char2_glob = 'B'
@@ -105,14 +107,19 @@ def proc0(loops = LOOPS)
     int_loc2 = 3
     string2_loc = "DHRYSTONE PROGRAM, 2'ND STRING"
     enum_loc = IDENT2
+
     $bool_glob = !func2(string1_loc, string2_loc)
+
     while int_loc1 < int_loc2 do
       int_loc3 = 5 * int_loc1 - int_loc2
       int_loc3 = proc7(int_loc1, int_loc2)
       int_loc1 += 1
     end
+
     proc8($array1_glob, $array2_glob, int_loc1, int_loc3)
+
     $ptr_glb = proc1($ptr_glb)
+
     char_index = 'A'
     while char_index <= $char2_glob do
       if enum_loc == func1(char_index, 'C')
@@ -120,6 +127,7 @@ def proc0(loops = LOOPS)
       end
       char_index = (char_index.ord+1).chr
     end
+
     int_loc3 = int_loc2 * int_loc1
     int_loc2 = int_loc3 / int_loc1
     int_loc2 = 7 * (int_loc3 - int_loc2) - int_loc1
@@ -127,11 +135,8 @@ def proc0(loops = LOOPS)
   end
 
   bench_time = Time.now - start_time - null_time
-  if bench_time <= 0
-    loops_per_bench_time = 0.0
-  else
-    loops_per_bench_time = loops / bench_time
-  end
+
+  loops_per_bench_time = bench_time <= 0 ? 0.0 : loops / bench_time
   
   [bench_time, loops_per_bench_time]
 end
@@ -139,9 +144,11 @@ end
 def proc1(ptr_par_in)
   ptr_par_in.ptr_comp = next_record = $ptr_glb.dup
   ptr_par_in.int_comp = 5
+
   next_record.int_comp = ptr_par_in.int_comp
   next_record.ptr_comp = ptr_par_in.ptr_comp
   next_record.ptr_comp = proc3(next_record.ptr_comp)
+
   if next_record.discr == IDENT1
     next_record.int_comp = 6
     next_record.enum_comp = proc6(ptr_par_in.enum_comp)
@@ -150,12 +157,15 @@ def proc1(ptr_par_in)
   else
     ptr_par_in = next_record.dup
   end
+
   next_record.ptr_comp = nil
-  return ptr_par_in
+
+  ptr_par_in
 end
 
 def proc2(int_par_io)
   int_loc = int_par_io + 10
+
   loop do
     if $char1_glob == 'A'
       int_loc = int_loc - 1
@@ -166,7 +176,8 @@ def proc2(int_par_io)
       break
     end
   end
-  return int_par_io
+
+  int_par_io
 end
 
 def proc3(ptr_par_out)
@@ -175,49 +186,48 @@ def proc3(ptr_par_out)
   else
     $int_glob = 100
   end
+
   $ptr_glb.int_comp = proc7(10, $int_glob)
-  return ptr_par_out
+
+  ptr_par_out
 end
 
 def proc6(enum_par_in)
   enum_par_out = enum_par_in
-  if enum_par_in != IDENT3
-    enum_par_out = IDENT4
-  end
-  if enum_par_in == IDENT1
-    enum_par_out = IDENT1
-  elsif enum_par_in == IDENT2
-    if $int_glob > 100
-      enum_par_out = IDENT1
-    else
-      enum_par_out = IDENT4
+
+  enum_par_out = IDENT4 if enum_par_in != IDENT3
+
+  enum_par_out =
+    case enum_par_in
+    when IDENT1 then IDENT1
+    when IDENT2 then $int_glob > 100 ? IDENT1 : IDENT4
+    when IDENT3 then IDENT2
+    when IDENT5 then IDENT3
     end
-  elsif enum_par_in == IDENT3
-    enum_par_out = IDENT2
-  elsif enum_par_in == IDENT4
-    nil
-  elsif enum_par_in == IDENT5
-    enum_par_out = IDENT3
-  end
-  return enum_par_out
+
+  enum_par_out
 end
 
 def proc7(int_parI1, int_parI2)
   int_loc = int_parI1 + 2
-  int_par_out = int_parI2 + int_loc
-  return int_par_out
+
+  int_parI2 + int_loc
 end
 
 def proc8(array1_par, array2_par, int_parI1, int_parI2)
   int_loc = int_parI1 + 5
+
   array1_par[int_loc] = int_parI2
   array1_par[int_loc+1] = array1_par[int_loc]
   array1_par[int_loc+30] = int_loc
-  int_loc.upto(int_loc+1) do |intIndex|
-    array2_par[int_loc][intIndex] = int_loc
+
+  int_loc.upto(int_loc+1) do |int_index|
+    array2_par[int_loc][int_index] = int_loc
   end
+
   array2_par[int_loc][int_loc-1] = array2_par[int_loc][int_loc-1] + 1
   array2_par[int_loc+20][int_loc] = array1_par[int_loc]
+
   $int_glob = 5
 end
 
@@ -227,24 +237,23 @@ end
 
 def func2(str_parI1, str_parI2)
   int_loc = 1
+
   while int_loc <= 1 do
     if func1(str_parI1[int_loc], str_parI2[int_loc+1]) == IDENT1
       char_loc = 'A'
-      int_loc = int_loc + 1
+      int_loc += 1
     end
   end
-  if char_loc >= 'W' && char_loc <= 'Z'
-    int_loc = 7
-  end
-  if char_loc == 'X'
-    return true
+
+  int_loc = 7 if char_loc >= 'W' && char_loc <= 'Z'
+
+  return true if char_loc == 'X'
+    
+  if str_parI1 > str_parI2
+    int_loc += 7
+    true
   else
-    if str_parI1 > str_parI2
-      int_loc = int_loc + 7
-      return true
-    else
-      return false
-    end
+    false
   end
 end
 
@@ -254,16 +263,16 @@ def error(msg)
   exit(100)
 end
 
-loops = LOOPS
-nargs = ARGV.size
-if nargs > 1
-  error("%d arguments are too many;" % nargs)
-elsif nargs == 1
-  if /\A\d+\z/ !~ ARGV[0].to_s
-    error("Invalid argument %s; it must be a number" % ARGV[0])
-  end
+args_count, loops = ARGV.count, LOOPS
+
+case args_count
+when 0
+when 1
+  error("Invalid argument %s; it must be a number" % ARGV[0]) unless /\A\d+\z/ =~ ARGV[0].to_s
   loops = ARGV[0].to_i
+else
+  error("%d arguments are too many;" % args_count)
 end
 
-main('cold', loops)
-main('warm', loops)
+main 'cold', loops
+main 'warm', loops
