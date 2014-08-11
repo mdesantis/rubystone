@@ -25,7 +25,7 @@ Use the `rubystone` executable (`bin/rubystone` if you cloned the project)
 
 ## Output examples
 
-This are the output on my machine (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz):
+This are the outputs respective to MRI, JRuby and Rubinius interpreters on my machine (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz):
 
 ```
 $ ruby -v
