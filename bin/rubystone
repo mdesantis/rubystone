@@ -40,212 +40,214 @@ LOOPS = 50000
 
 IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| :"#{v}" }
 
-class Record
-  attr_accessor :ptr_comp, :discr, :enum_comp, :int_comp, :string_comp
+class Rubystone
+  class Record
+    attr_accessor :ptr_comp, :discr, :enum_comp, :int_comp, :string_comp
 
-  def initialize(ptr_comp = nil, discr = 0, enum_comp = 0, int_comp = 0, string_comp = 0)
-    @ptr_comp    = ptr_comp
-    @discr       = discr
-    @enum_comp   = enum_comp
-    @int_comp    = int_comp
-    @string_comp = string_comp
-  end
-end
-
-def init_globs
-  @int_glob     = 0
-  @bool_glob    = false
-  @char1_glob   = '\0'
-  @char2_glob   = '\0'
-  @array1_glob  = [0]*51
-  @array2_glob  = [@array1_glob.dup]*51
-  @ptr_glb      = nil
-  @ptr_glb_next = nil
-end
-
-def main(status, loops = LOOPS)
-  init_globs
-  bench_time, stones = rubystones(loops)
-  puts "Rubystone %s %s time for %d passes = %.7g" % [VERSION, status, loops, bench_time]
-  puts "This machine benchmarks at %d %s rubystones/second" % [stones, status]
-end
-
-def rubystones(loops = LOOPS)
-  proc0 loops
-end
-
-def proc0(loops = LOOPS)
-  start_time = Time.now
-  loops.times { |i| nil }
-  null_time = Time.now - start_time
-
-  @ptr_glb_next = Record.new
-
-  @ptr_glb = Record.new @ptr_glb_next, IDENT1, IDENT3, 40, "DHRYSTONE PROGRAM, SOME STRING"
-
-  string1_loc = "DHRYSTONE PROGRAM, 1'ST STRING"
-  @array2_glob[8][7] = 10
-
-  start_time = Time.now
-
-  loops.times do
-    # original proc5
-    @char1_glob = 'A'
-    @bool_glob  = false
-
-    # original proc4
-    bool_loc = @char1_glob == 'A'
-    bool_loc = bool_loc || @bool_glob
-    @char2_glob = 'B'
-
-    int_loc1 = 2
-    int_loc2 = 3
-    string2_loc = "DHRYSTONE PROGRAM, 2'ND STRING"
-    enum_loc = IDENT2
-
-    @bool_glob = !func2(string1_loc, string2_loc)
-
-    while int_loc1 < int_loc2 do
-      int_loc3 = 5 * int_loc1 - int_loc2
-      int_loc3 = proc7(int_loc1, int_loc2)
-      int_loc1 += 1
+    def initialize(ptr_comp = nil, discr = 0, enum_comp = 0, int_comp = 0, string_comp = 0)
+      @ptr_comp    = ptr_comp
+      @discr       = discr
+      @enum_comp   = enum_comp
+      @int_comp    = int_comp
+      @string_comp = string_comp
     end
+  end
 
-    proc8(@array1_glob, @array2_glob, int_loc1, int_loc3)
+  def init_globs
+    @int_glob     = 0
+    @bool_glob    = false
+    @char1_glob   = '\0'
+    @char2_glob   = '\0'
+    @array1_glob  = [0]*51
+    @array2_glob  = [@array1_glob.dup]*51
+    @ptr_glb      = nil
+    @ptr_glb_next = nil
+  end
 
-    @ptr_glb = proc1
+  def run(status, loops = LOOPS)
+    init_globs
+    bench_time, stones = rubystones(loops)
+    puts "Rubystone %s %s time for %d passes = %.7g" % [VERSION, status, loops, bench_time]
+    puts "This machine benchmarks at %d %s rubystones/second" % [stones, status]
+  end
 
-    char_index = 'A'
-    while char_index <= @char2_glob do
-      if enum_loc == func1(char_index, 'C')
-        enum_loc = proc6(IDENT1)
+  def rubystones(loops = LOOPS)
+    proc0 loops
+  end
+
+  def proc0(loops = LOOPS)
+    start_time = Time.now
+    loops.times { |i| nil }
+    null_time = Time.now - start_time
+
+    @ptr_glb_next = Record.new
+
+    @ptr_glb = Record.new @ptr_glb_next, IDENT1, IDENT3, 40, "DHRYSTONE PROGRAM, SOME STRING"
+
+    string1_loc = "DHRYSTONE PROGRAM, 1'ST STRING"
+    @array2_glob[8][7] = 10
+
+    start_time = Time.now
+
+    loops.times do
+      # original proc5
+      @char1_glob = 'A'
+      @bool_glob  = false
+
+      # original proc4
+      bool_loc = @char1_glob == 'A'
+      bool_loc = bool_loc || @bool_glob
+      @char2_glob = 'B'
+
+      int_loc1 = 2
+      int_loc2 = 3
+      string2_loc = "DHRYSTONE PROGRAM, 2'ND STRING"
+      enum_loc = IDENT2
+
+      @bool_glob = !func2(string1_loc, string2_loc)
+
+      while int_loc1 < int_loc2 do
+        int_loc3 = 5 * int_loc1 - int_loc2
+        int_loc3 = proc7(int_loc1, int_loc2)
+        int_loc1 += 1
       end
-      char_index = (char_index.ord+1).chr
+
+      proc8(@array1_glob, @array2_glob, int_loc1, int_loc3)
+
+      @ptr_glb = proc1
+
+      char_index = 'A'
+      while char_index <= @char2_glob do
+        if enum_loc == func1(char_index, 'C')
+          enum_loc = proc6(IDENT1)
+        end
+        char_index = (char_index.ord+1).chr
+      end
+
+      int_loc3 = int_loc2 * int_loc1
+      int_loc2 = int_loc3 / int_loc1
+      int_loc2 = 7 * (int_loc3 - int_loc2) - int_loc1
+      int_loc1 = proc2(int_loc1)
     end
 
-    int_loc3 = int_loc2 * int_loc1
-    int_loc2 = int_loc3 / int_loc1
-    int_loc2 = 7 * (int_loc3 - int_loc2) - int_loc1
-    int_loc1 = proc2(int_loc1)
-  end
+    bench_time = Time.now - start_time - null_time
 
-  bench_time = Time.now - start_time - null_time
-
-  loops_per_bench_time = bench_time <= 0 ? 0.0 : loops / bench_time
-  
-  [bench_time, loops_per_bench_time]
-end
-
-def proc1
-  @ptr_glb.ptr_comp = next_record = @ptr_glb.dup
-  @ptr_glb.int_comp = 5
-
-  next_record.int_comp = @ptr_glb.int_comp
-  next_record.ptr_comp = @ptr_glb.ptr_comp
-  next_record.ptr_comp = proc3(next_record.ptr_comp)
-
-  if next_record.discr == IDENT1
-    next_record.int_comp = 6
-    next_record.enum_comp = proc6(@ptr_glb.enum_comp)
-    next_record.ptr_comp = @ptr_glb.ptr_comp
-    next_record.int_comp = proc7(next_record.int_comp, 10)
-  else
-    @ptr_glb = next_record.dup
-  end
-
-  next_record.ptr_comp = nil
-
-  @ptr_glb
-end
-
-def proc2(int_par_io)
-  int_loc = int_par_io + 10
-
-  begin
-    if @char1_glob == 'A'
-      int_loc = int_loc - 1
-      int_par_io = int_loc - @int_glob
-      enum_loc = IDENT1
-    end
-  end while enum_loc != IDENT1
-
-  int_par_io
-end
-
-def proc3(ptr_par_out)
-  if @ptr_glb != nil
-    ptr_par_out = @ptr_glb.ptr_comp
-  else
-    @int_glob = 100
-  end
-
-  @ptr_glb.int_comp = proc7(10, @int_glob)
-
-  ptr_par_out
-end
-
-def proc6(enum_par_in)
-  enum_par_out = enum_par_in
-
-  enum_par_out = IDENT4 if enum_par_in != IDENT3
-
-  enum_par_out =
-    case enum_par_in
-    when IDENT1 then IDENT1
-    when IDENT2 then @int_glob > 100 ? IDENT1 : IDENT4
-    when IDENT3 then IDENT2
-    when IDENT5 then IDENT3
-    end
-
-  enum_par_out
-end
-
-def proc7(int_par_i1, int_par_i2)
-  int_loc = int_par_i1 + 2
-
-  int_par_i2 + int_loc
-end
-
-def proc8(array1_par, array2_par, int_par_i1, int_par_i2)
-  int_loc = int_par_i1 + 5
-
-  array1_par[int_loc] = int_par_i2
-  array1_par[int_loc+1] = array1_par[int_loc]
-  array1_par[int_loc+30] = int_loc
-
-  int_loc.upto(int_loc+1) do |int_index|
-    array2_par[int_loc][int_index] = int_loc
-  end
-
-  array2_par[int_loc][int_loc-1] = array2_par[int_loc][int_loc-1] + 1
-  array2_par[int_loc+20][int_loc] = array1_par[int_loc]
-
-  @int_glob = 5
-end
-
-def func1(char_par1, char_par2)
-  char_par1 == char_par2 ? IDENT2 : IDENT1
-end
-
-def func2(str_parI1, str_parI2)
-  int_loc = 1
-
-  while int_loc <= 1 do
-    if func1(str_parI1[int_loc], str_parI2[int_loc+1]) == IDENT1
-      char_loc = 'A'
-      int_loc += 1
-    end
-  end
-
-  int_loc = 7 if char_loc >= 'W' && char_loc <= 'Z'
-
-  return true if char_loc == 'X'
+    loops_per_bench_time = bench_time <= 0 ? 0.0 : loops / bench_time
     
-  if str_parI1 > str_parI2
-    int_loc += 7
-    true
-  else
-    false
+    [bench_time, loops_per_bench_time]
+  end
+
+  def proc1
+    @ptr_glb.ptr_comp = next_record = @ptr_glb.dup
+    @ptr_glb.int_comp = 5
+
+    next_record.int_comp = @ptr_glb.int_comp
+    next_record.ptr_comp = @ptr_glb.ptr_comp
+    next_record.ptr_comp = proc3(next_record.ptr_comp)
+
+    if next_record.discr == IDENT1
+      next_record.int_comp = 6
+      next_record.enum_comp = proc6(@ptr_glb.enum_comp)
+      next_record.ptr_comp = @ptr_glb.ptr_comp
+      next_record.int_comp = proc7(next_record.int_comp, 10)
+    else
+      @ptr_glb = next_record.dup
+    end
+
+    next_record.ptr_comp = nil
+
+    @ptr_glb
+  end
+
+  def proc2(int_par_io)
+    int_loc = int_par_io + 10
+
+    begin
+      if @char1_glob == 'A'
+        int_loc = int_loc - 1
+        int_par_io = int_loc - @int_glob
+        enum_loc = IDENT1
+      end
+    end while enum_loc != IDENT1
+
+    int_par_io
+  end
+
+  def proc3(ptr_par_out)
+    if @ptr_glb != nil
+      ptr_par_out = @ptr_glb.ptr_comp
+    else
+      @int_glob = 100
+    end
+
+    @ptr_glb.int_comp = proc7(10, @int_glob)
+
+    ptr_par_out
+  end
+
+  def proc6(enum_par_in)
+    enum_par_out = enum_par_in
+
+    enum_par_out = IDENT4 if enum_par_in != IDENT3
+
+    enum_par_out =
+      case enum_par_in
+      when IDENT1 then IDENT1
+      when IDENT2 then @int_glob > 100 ? IDENT1 : IDENT4
+      when IDENT3 then IDENT2
+      when IDENT5 then IDENT3
+      end
+
+    enum_par_out
+  end
+
+  def proc7(int_par_i1, int_par_i2)
+    int_loc = int_par_i1 + 2
+
+    int_par_i2 + int_loc
+  end
+
+  def proc8(array1_par, array2_par, int_par_i1, int_par_i2)
+    int_loc = int_par_i1 + 5
+
+    array1_par[int_loc] = int_par_i2
+    array1_par[int_loc+1] = array1_par[int_loc]
+    array1_par[int_loc+30] = int_loc
+
+    int_loc.upto(int_loc+1) do |int_index|
+      array2_par[int_loc][int_index] = int_loc
+    end
+
+    array2_par[int_loc][int_loc-1] = array2_par[int_loc][int_loc-1] + 1
+    array2_par[int_loc+20][int_loc] = array1_par[int_loc]
+
+    @int_glob = 5
+  end
+
+  def func1(char_par1, char_par2)
+    char_par1 == char_par2 ? IDENT2 : IDENT1
+  end
+
+  def func2(str_parI1, str_parI2)
+    int_loc = 1
+
+    while int_loc <= 1 do
+      if func1(str_parI1[int_loc], str_parI2[int_loc+1]) == IDENT1
+        char_loc = 'A'
+        int_loc += 1
+      end
+    end
+
+    int_loc = 7 if char_loc >= 'W' && char_loc <= 'Z'
+
+    return true if char_loc == 'X'
+      
+    if str_parI1 > str_parI2
+      int_loc += 7
+      true
+    else
+      false
+    end
   end
 end
 
@@ -266,5 +268,5 @@ else
   error("%d arguments are too many;" % args_count)
 end
 
-main 'cold', loops
-main 'warm', loops
+Rubystone.new.run 'cold', loops
+Rubystone.new.run 'warm', loops
