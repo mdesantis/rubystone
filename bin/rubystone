@@ -34,13 +34,11 @@
 #
 # License:        MIT
 
-VERSION = File.read File.expand_path(File.join('..', '..', 'VERSION'), __FILE__)
-
-LOOPS = 50000
-
-IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| :"#{v}" }
-
 class Rubystone
+  VERSION = File.read File.expand_path(File.join('..', '..', 'VERSION'), __FILE__)
+
+  IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| :"#{v}" }
+  
   class Record
     attr_accessor :ptr_comp, :discr, :enum_comp, :int_comp, :string_comp
 
@@ -64,18 +62,18 @@ class Rubystone
     @ptr_glb_next = nil
   end
 
-  def run(status, loops = LOOPS)
+  def run(status, loops)
     init_globs
     bench_time, stones = rubystones(loops)
     puts "Rubystone %s %s time for %d passes = %.7g" % [VERSION, status, loops, bench_time]
     puts "This machine benchmarks at %d %s rubystones/second" % [stones, status]
   end
 
-  def rubystones(loops = LOOPS)
+  def rubystones(loops)
     proc0 loops
   end
 
-  def proc0(loops = LOOPS)
+  def proc0(loops)
     start_time = Time.now
     loops.times { |i| nil }
     null_time = Time.now - start_time
@@ -112,15 +110,14 @@ class Rubystone
         int_loc1 += 1
       end
 
-      proc8(@array1_glob, @array2_glob, int_loc1, int_loc3)
+      proc8(int_loc1, int_loc3)
 
       @ptr_glb = proc1
 
       char_index = 'A'
       while char_index <= @char2_glob do
-        if enum_loc == func1(char_index, 'C')
-          enum_loc = proc6(IDENT1)
-        end
+        enum_loc = proc6(IDENT1) if enum_loc == func1(char_index, 'C')
+
         char_index = (char_index.ord+1).chr
       end
 
@@ -163,18 +160,18 @@ class Rubystone
     int_loc = int_par_io + 10
 
     begin
-      if @char1_glob == 'A'
-        int_loc = int_loc - 1
-        int_par_io = int_loc - @int_glob
-        enum_loc = IDENT1
-      end
+      next if @char1_glob != 'A'
+
+      int_loc = int_loc - 1
+      int_par_io = int_loc - @int_glob
+      enum_loc = IDENT1
     end while enum_loc != IDENT1
 
     int_par_io
   end
 
   def proc3(ptr_par_out)
-    if @ptr_glb != nil
+    if @ptr_glb
       ptr_par_out = @ptr_glb.ptr_comp
     else
       @int_glob = 100
@@ -207,19 +204,19 @@ class Rubystone
     int_par_i2 + int_loc
   end
 
-  def proc8(array1_par, array2_par, int_par_i1, int_par_i2)
+  def proc8(int_par_i1, int_par_i2)
     int_loc = int_par_i1 + 5
 
-    array1_par[int_loc] = int_par_i2
-    array1_par[int_loc+1] = array1_par[int_loc]
-    array1_par[int_loc+30] = int_loc
+    @array1_glob[int_loc] = int_par_i2
+    @array1_glob[int_loc+1] = @array1_glob[int_loc]
+    @array1_glob[int_loc+30] = int_loc
 
     int_loc.upto(int_loc+1) do |int_index|
-      array2_par[int_loc][int_index] = int_loc
+      @array2_glob[int_loc][int_index] = int_loc
     end
 
-    array2_par[int_loc][int_loc-1] = array2_par[int_loc][int_loc-1] + 1
-    array2_par[int_loc+20][int_loc] = array1_par[int_loc]
+    @array2_glob[int_loc][int_loc-1] = @array2_glob[int_loc][int_loc-1] + 1
+    @array2_glob[int_loc+20][int_loc] = @array1_glob[int_loc]
 
     @int_glob = 5
   end
@@ -232,10 +229,10 @@ class Rubystone
     int_loc = 1
 
     while int_loc <= 1 do
-      if func1(str_parI1[int_loc], str_parI2[int_loc+1]) == IDENT1
-        char_loc = 'A'
-        int_loc += 1
-      end
+      next if func1(str_parI1[int_loc], str_parI2[int_loc+1]) != IDENT1
+
+      char_loc = 'A'
+      int_loc += 1
     end
 
     int_loc = 7 if char_loc >= 'W' && char_loc <= 'Z'
@@ -257,7 +254,7 @@ def error(msg)
   exit(100)
 end
 
-args_count, loops = ARGV.count, LOOPS
+args_count, loops = ARGV.count, 50_000
 
 case args_count
 when 0
