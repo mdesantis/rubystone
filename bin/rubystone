@@ -38,7 +38,7 @@ VERSION = File.read File.expand_path(File.join('..', '..', 'VERSION'), __FILE__)
 
 LOOPS = 50000
 
-IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| v.to_s.to_sym }
+IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| :"#{v}" }
 
 class Record
   attr_accessor :ptr_comp, :discr, :enum_comp, :int_comp, :string_comp
@@ -81,12 +81,7 @@ def proc0(loops = LOOPS)
 
   @ptr_glb_next = Record.new
 
-  @ptr_glb = Record.new
-  @ptr_glb.ptr_comp    = @ptr_glb_next
-  @ptr_glb.discr       = IDENT1
-  @ptr_glb.enum_comp   = IDENT3
-  @ptr_glb.int_comp    = 40
-  @ptr_glb.string_comp = "DHRYSTONE PROGRAM, SOME STRING"
+  @ptr_glb = Record.new @ptr_glb_next, IDENT1, IDENT3, 40, "DHRYSTONE PROGRAM, SOME STRING"
 
   string1_loc = "DHRYSTONE PROGRAM, 1'ST STRING"
   @array2_glob[8][7] = 10
@@ -118,7 +113,7 @@ def proc0(loops = LOOPS)
 
     proc8(@array1_glob, @array2_glob, int_loc1, int_loc3)
 
-    @ptr_glb = proc1(@ptr_glb)
+    @ptr_glb = proc1
 
     char_index = 'A'
     while char_index <= @char2_glob do
@@ -141,26 +136,26 @@ def proc0(loops = LOOPS)
   [bench_time, loops_per_bench_time]
 end
 
-def proc1(ptr_par_in)
-  ptr_par_in.ptr_comp = next_record = @ptr_glb.dup
-  ptr_par_in.int_comp = 5
+def proc1
+  @ptr_glb.ptr_comp = next_record = @ptr_glb.dup
+  @ptr_glb.int_comp = 5
 
-  next_record.int_comp = ptr_par_in.int_comp
-  next_record.ptr_comp = ptr_par_in.ptr_comp
+  next_record.int_comp = @ptr_glb.int_comp
+  next_record.ptr_comp = @ptr_glb.ptr_comp
   next_record.ptr_comp = proc3(next_record.ptr_comp)
 
   if next_record.discr == IDENT1
     next_record.int_comp = 6
-    next_record.enum_comp = proc6(ptr_par_in.enum_comp)
+    next_record.enum_comp = proc6(@ptr_glb.enum_comp)
     next_record.ptr_comp = @ptr_glb.ptr_comp
     next_record.int_comp = proc7(next_record.int_comp, 10)
   else
-    ptr_par_in = next_record.dup
+    @ptr_glb = next_record.dup
   end
 
   next_record.ptr_comp = nil
 
-  ptr_par_in
+  @ptr_glb
 end
 
 def proc2(int_par_io)
@@ -205,16 +200,16 @@ def proc6(enum_par_in)
   enum_par_out
 end
 
-def proc7(int_parI1, int_parI2)
-  int_loc = int_parI1 + 2
+def proc7(int_par_i1, int_par_i2)
+  int_loc = int_par_i1 + 2
 
-  int_parI2 + int_loc
+  int_par_i2 + int_loc
 end
 
-def proc8(array1_par, array2_par, int_parI1, int_parI2)
-  int_loc = int_parI1 + 5
+def proc8(array1_par, array2_par, int_par_i1, int_par_i2)
+  int_loc = int_par_i1 + 5
 
-  array1_par[int_loc] = int_parI2
+  array1_par[int_loc] = int_par_i2
   array1_par[int_loc+1] = array1_par[int_loc]
   array1_par[int_loc+30] = int_loc
 
