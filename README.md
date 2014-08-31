@@ -31,7 +31,7 @@ This are the outputs respective to MRI, JRuby and Rubinius interpreters on my ma
 $ ruby -v
 ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-linux]
 $ rubystone
-Rubystone 1.0 cold time for 50000 passes = 0.6164484
+Rubystone 1.0.4 cold time for 50000 passes = 0.6164484
 This machine benchmarks at 81109 cold rubystones/second
 Rubystone 1.0 warm time for 50000 passes = 0.6284089
 This machine benchmarks at 79566 warm rubystones/second
@@ -39,17 +39,17 @@ This machine benchmarks at 79566 warm rubystones/second
 $ ruby -v
 jruby 1.7.13 (2.0.0p195) 2014-06-24 43f133c on OpenJDK 64-Bit Server VM 1.7.0_55-b14 [linux-amd64]
 $ rubystone
-Rubystone 1.0 cold time for 50000 passes = 0.903
+Rubystone 1.0.4 cold time for 50000 passes = 0.903
 This machine benchmarks at 55370 cold rubystones/second
-Rubystone 1.0 warm time for 50000 passes = 0.293
+Rubystone 1.0.4 warm time for 50000 passes = 0.293
 This machine benchmarks at 170648 warm rubystones/second
 
 $ ruby -v
 rubinius 2.2.10 (2.1.0 bf61ae2e 2014-06-27 JI) [x86_64-linux-gnu]
 $ rubystone
-Rubystone 1.0 cold time for 50000 passes = 0.689623
+Rubystone 1.0.4 cold time for 50000 passes = 0.689623
 This machine benchmarks at 72503 cold rubystones/second
-Rubystone 1.0 warm time for 50000 passes = 0.321823
+Rubystone 1.0.4 warm time for 50000 passes = 0.321823
 This machine benchmarks at 155364 warm rubystones/second
 ```
 
