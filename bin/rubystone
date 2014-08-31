@@ -34,9 +34,9 @@
 #
 # License:        MIT
 
-LOOPS = 50000
-
 VERSION = File.read File.expand_path(File.join('..', '..', 'VERSION'), __FILE__)
+
+LOOPS = 50000
 
 IDENT1, IDENT2, IDENT3, IDENT4, IDENT5 = 1.upto(5).map { |v| v.to_s.to_sym }
 
@@ -58,7 +58,7 @@ def init_globs
   $char1_glob   = '\0'
   $char2_glob   = '\0'
   $array1_glob  = [0]*51
-  $array2_glob  = ([$array1_glob]*51).map { |x| x }
+  $array2_glob  = [$array1_glob.dup]*51
   $ptr_glb      = nil
   $ptr_glb_next = nil
 end
@@ -93,7 +93,7 @@ def proc0(loops = LOOPS)
 
   start_time = Time.now
 
-  loops.times do |i|
+  loops.times do
     # original proc5
     $char1_glob = 'A'
     $bool_glob  = false
@@ -166,16 +166,13 @@ end
 def proc2(int_par_io)
   int_loc = int_par_io + 10
 
-  loop do
+  begin
     if $char1_glob == 'A'
       int_loc = int_loc - 1
       int_par_io = int_loc - $int_glob
       enum_loc = IDENT1
     end
-    if enum_loc == IDENT1
-      break
-    end
-  end
+  end while enum_loc != IDENT1
 
   int_par_io
 end
