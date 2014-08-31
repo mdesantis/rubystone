@@ -24,7 +24,7 @@
 #
 # Version History:
 #
-#        1.0.4    Syntax clean up and small refactorings
+#        1.0.4    Syntax cleanup and various refactorings
 #        1.0.3    Updating README
 #        1.0.2    Updating of the script comment in order to reflect the README
 #        1.0.1    Generating new gem
@@ -53,14 +53,14 @@ class Record
 end
 
 def init_globs
-  $int_glob     = 0
-  $bool_glob    = false
-  $char1_glob   = '\0'
-  $char2_glob   = '\0'
-  $array1_glob  = [0]*51
-  $array2_glob  = [$array1_glob.dup]*51
-  $ptr_glb      = nil
-  $ptr_glb_next = nil
+  @int_glob     = 0
+  @bool_glob    = false
+  @char1_glob   = '\0'
+  @char2_glob   = '\0'
+  @array1_glob  = [0]*51
+  @array2_glob  = [@array1_glob.dup]*51
+  @ptr_glb      = nil
+  @ptr_glb_next = nil
 end
 
 def main(status, loops = LOOPS)
@@ -79,36 +79,36 @@ def proc0(loops = LOOPS)
   loops.times { |i| nil }
   null_time = Time.now - start_time
 
-  $ptr_glb_next = Record.new
+  @ptr_glb_next = Record.new
 
-  $ptr_glb = Record.new
-  $ptr_glb.ptr_comp    = $ptr_glb_next
-  $ptr_glb.discr       = IDENT1
-  $ptr_glb.enum_comp   = IDENT3
-  $ptr_glb.int_comp    = 40
-  $ptr_glb.string_comp = "DHRYSTONE PROGRAM, SOME STRING"
+  @ptr_glb = Record.new
+  @ptr_glb.ptr_comp    = @ptr_glb_next
+  @ptr_glb.discr       = IDENT1
+  @ptr_glb.enum_comp   = IDENT3
+  @ptr_glb.int_comp    = 40
+  @ptr_glb.string_comp = "DHRYSTONE PROGRAM, SOME STRING"
 
   string1_loc = "DHRYSTONE PROGRAM, 1'ST STRING"
-  $array2_glob[8][7] = 10
+  @array2_glob[8][7] = 10
 
   start_time = Time.now
 
   loops.times do
     # original proc5
-    $char1_glob = 'A'
-    $bool_glob  = false
+    @char1_glob = 'A'
+    @bool_glob  = false
 
     # original proc4
-    bool_loc = $char1_glob == 'A'
-    bool_loc = bool_loc || $bool_glob
-    $char2_glob = 'B'
+    bool_loc = @char1_glob == 'A'
+    bool_loc = bool_loc || @bool_glob
+    @char2_glob = 'B'
 
     int_loc1 = 2
     int_loc2 = 3
     string2_loc = "DHRYSTONE PROGRAM, 2'ND STRING"
     enum_loc = IDENT2
 
-    $bool_glob = !func2(string1_loc, string2_loc)
+    @bool_glob = !func2(string1_loc, string2_loc)
 
     while int_loc1 < int_loc2 do
       int_loc3 = 5 * int_loc1 - int_loc2
@@ -116,12 +116,12 @@ def proc0(loops = LOOPS)
       int_loc1 += 1
     end
 
-    proc8($array1_glob, $array2_glob, int_loc1, int_loc3)
+    proc8(@array1_glob, @array2_glob, int_loc1, int_loc3)
 
-    $ptr_glb = proc1($ptr_glb)
+    @ptr_glb = proc1(@ptr_glb)
 
     char_index = 'A'
-    while char_index <= $char2_glob do
+    while char_index <= @char2_glob do
       if enum_loc == func1(char_index, 'C')
         enum_loc = proc6(IDENT1)
       end
@@ -142,7 +142,7 @@ def proc0(loops = LOOPS)
 end
 
 def proc1(ptr_par_in)
-  ptr_par_in.ptr_comp = next_record = $ptr_glb.dup
+  ptr_par_in.ptr_comp = next_record = @ptr_glb.dup
   ptr_par_in.int_comp = 5
 
   next_record.int_comp = ptr_par_in.int_comp
@@ -152,7 +152,7 @@ def proc1(ptr_par_in)
   if next_record.discr == IDENT1
     next_record.int_comp = 6
     next_record.enum_comp = proc6(ptr_par_in.enum_comp)
-    next_record.ptr_comp = $ptr_glb.ptr_comp
+    next_record.ptr_comp = @ptr_glb.ptr_comp
     next_record.int_comp = proc7(next_record.int_comp, 10)
   else
     ptr_par_in = next_record.dup
@@ -167,9 +167,9 @@ def proc2(int_par_io)
   int_loc = int_par_io + 10
 
   begin
-    if $char1_glob == 'A'
+    if @char1_glob == 'A'
       int_loc = int_loc - 1
-      int_par_io = int_loc - $int_glob
+      int_par_io = int_loc - @int_glob
       enum_loc = IDENT1
     end
   end while enum_loc != IDENT1
@@ -178,13 +178,13 @@ def proc2(int_par_io)
 end
 
 def proc3(ptr_par_out)
-  if $ptr_glb != nil
-    ptr_par_out = $ptr_glb.ptr_comp
+  if @ptr_glb != nil
+    ptr_par_out = @ptr_glb.ptr_comp
   else
-    $int_glob = 100
+    @int_glob = 100
   end
 
-  $ptr_glb.int_comp = proc7(10, $int_glob)
+  @ptr_glb.int_comp = proc7(10, @int_glob)
 
   ptr_par_out
 end
@@ -197,7 +197,7 @@ def proc6(enum_par_in)
   enum_par_out =
     case enum_par_in
     when IDENT1 then IDENT1
-    when IDENT2 then $int_glob > 100 ? IDENT1 : IDENT4
+    when IDENT2 then @int_glob > 100 ? IDENT1 : IDENT4
     when IDENT3 then IDENT2
     when IDENT5 then IDENT3
     end
@@ -225,7 +225,7 @@ def proc8(array1_par, array2_par, int_parI1, int_parI2)
   array2_par[int_loc][int_loc-1] = array2_par[int_loc][int_loc-1] + 1
   array2_par[int_loc+20][int_loc] = array1_par[int_loc]
 
-  $int_glob = 5
+  @int_glob = 5
 end
 
 def func1(char_par1, char_par2)
