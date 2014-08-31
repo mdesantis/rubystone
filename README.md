@@ -33,7 +33,7 @@ ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-linux]
 $ rubystone
 Rubystone 1.0.4 cold time for 50000 passes = 0.6164484
 This machine benchmarks at 81109 cold rubystones/second
-Rubystone 1.0 warm time for 50000 passes = 0.6284089
+Rubystone 1.0.4 warm time for 50000 passes = 0.6284089
 This machine benchmarks at 79566 warm rubystones/second
 
 $ ruby -v
@@ -55,7 +55,7 @@ This machine benchmarks at 155364 warm rubystones/second
 
 ## Version
 
-Ruby/1.0.3 (corresponds to Python/1.1 PYSTONE version)
+Ruby/1.0.4 (corresponds to Python/1.1 PYSTONE version)
 
 ## Author
 
